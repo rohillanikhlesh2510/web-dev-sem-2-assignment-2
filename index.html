@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+body{
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    color: #333;
+}
+
+
+h1{
+    margin-bottom: 25px;
+    color: white;
+    font-size: 32px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+
+#search-main-container{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 900px;
+    justify-content: space-between;
+}
+
+
+#search-city-box,
+#search-history-box{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    flex: 1;
+}
+
+form{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+input{
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus{
+    outline: none;
+    border-color: #093358;
+    box-shadow: 0 0 5px rgba(79,172,254,0.5);
+}
+
+
+button{
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #04243f;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+button:hover{
+    background: #00c6ff;
+    transform: scale(1.05);
+}
+
+
+#weather-info-container{
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+
+#city-weather-container div{
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+
+@media (max-width: 768px){
+    #search-main-container{
+        flex-direction: column;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Async Weather Tracker</h1>
+    <div id="search-main-container">
+        <div id="search-city-box">
+            <h3>Search City</h3>
+            <form action="">
+                <input type="text" name="" id="city">
+                <button type="submit">Search</button>
+            </form>
+
+            
+        </div>
+
+        <div id="search-history-box">
+            <h3>Search History</h3>
+            <div id="searched-cities-box">
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div id="weather-info-container">
+        <h3>Weather Info</h3>
+        <div id="city-weather-container">
+        </div>
+    </div> 
+
+    <script>
+        let form=document.querySelector("form");
+        let city=document.querySelector("#city");
+        let weather=document.querySelector("#city-weather-container");
+        let API_KEY="af9f63c59a649f27d602b96a43d0bd14";
+        
+        async function getWeather(city){
+         let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
+         
+         let data=await response.json();
+         let card=document.createElement("div");
+         card.innerHTML=`<div>City: ${data.name},${data.sys.country}</div>
+                         <div>Temp : ${data.main.temp}°C</div>
+                         <div>Weather : ${data.weather[0].main}</div>
+                         <div>Humidity: ${data.main.humidity}</div>
+                         <div>Wind : ${data.wind.speed}</div>`
+        weather.innerHTML="";                
+        weather.append(card);
+        }
+    
+        form.addEventListener("submit",(event)=>{
+            event.preventDefault();
+            getWeather(city.value);
+        }); 
+       
+
+    
+    
+    
+    
+    </script>
+</body>
+</html>
